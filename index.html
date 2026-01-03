@@ -414,6 +414,14 @@
       transform: rotate(-90deg) scale(0.98);
     }
 
+    body.lane-active .page {
+      padding-left: 152px;
+    }
+
+    .mini-truck .wheel {
+      animation: spin 1s linear infinite paused;
+      transform-origin: center;
+    }
 
     .margin-truck.forward .wheel,
     .margin-truck.reverse .wheel {
@@ -439,7 +447,7 @@
       100% { transform: translateY(0); }
     }
 
-    @media (max-width: 900px) {
+    @media (max-width: 1100px) {
       .margin-lane {
         display: none;
       }
@@ -662,6 +670,7 @@
     const rope = document.querySelector(".pull-rope");
     const airbrakeToggle = document.getElementById("airbrake-toggle");
     const soundToggle = document.querySelector(".sound-toggle");
+    const marginLane = document.querySelector(".margin-lane");
     const marginTruck = document.querySelector(".margin-truck");
     const hornAudio = new Audio("media/horn.m4a");
     const airbrakeAudio = new Audio("media/airbrake.m4a");
@@ -677,6 +686,7 @@
     let airbrakeEnabled = false;
     let airbrakeUnlocked = false;
     let truckDirectionDown = true;
+    const laneMinWidth = 1100;
 
     function ensureAudioContext() {
       if (!audioCtx) {
@@ -708,6 +718,11 @@
       const travel = Math.max(window.innerHeight - 220, 60);
       const y = 70 + progress * travel;
       marginTruck.style.transform = `translateY(${y}px)`;
+    }
+
+    function updateLaneState() {
+      const active = marginLane && window.innerWidth > laneMinWidth;
+      document.body.classList.toggle("lane-active", !!active);
     }
 
     function updateTruckDirection(isDown) {
@@ -757,7 +772,12 @@
       }, 220);
     }, { passive: true });
 
-    window.addEventListener("resize", updateMarginTruckPosition);
+    function handleResize() {
+      updateLaneState();
+      updateMarginTruckPosition();
+    }
+
+    window.addEventListener("resize", handleResize);
 
     airbrakeToggle.addEventListener("change", () => {
       airbrakeEnabled = airbrakeToggle.checked;
@@ -766,6 +786,7 @@
       }
     });
 
+    updateLaneState();
     updateMarginTruckPosition();
     ["pointerdown", "touchstart", "keydown", "wheel", "touchmove"].forEach(evt => {
       window.addEventListener(evt, ensureAudioContext, { once: true, passive: true });
