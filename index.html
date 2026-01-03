@@ -535,6 +535,10 @@
     const pullHandle = document.querySelector(".pull-handle");
     const rope = document.querySelector(".pull-rope");
     const airbrakeToggle = document.getElementById("airbrake-toggle");
+    const hornAudio = new Audio("media/horn.m4a");
+    const airbrakeAudio = new Audio("media/airbrake.m4a");
+    hornAudio.preload = "auto";
+    airbrakeAudio.preload = "auto";
     let audioCtx;
     let scrollTimer;
     let lastScrollY = window.scrollY;
@@ -551,17 +555,17 @@
       return audioCtx;
     }
 
-function playHorn() {
-    const audio = new Audio('media/horn.m4a');
-    audio.currentTime = 0;
-    audio.play();
-}
+    function playHorn() {
+      ensureAudioContext();
+      hornAudio.currentTime = 0;
+      hornAudio.play();
+    }
 
     function playAirBrakes() {
-    const audio = new Audio('media/airbrake.m4a');
-    audio.currentTime = 0;
-    audio.play();
-}
+      ensureAudioContext();
+      airbrakeAudio.currentTime = 0;
+      airbrakeAudio.play();
+    }
 
     pullHandle.addEventListener("click", () => {
       pullHandle.classList.remove("pulled");
@@ -590,8 +594,8 @@ function playHorn() {
       }
     });
 
-    ["pointerdown", "touchstart", "keydown"].forEach(evt => {
-      window.addEventListener(evt, ensureAudioContext, { once: true });
+    ["pointerdown", "touchstart", "keydown", "wheel", "touchmove"].forEach(evt => {
+      window.addEventListener(evt, ensureAudioContext, { once: true, passive: true });
     });
   </script>
 </body>
