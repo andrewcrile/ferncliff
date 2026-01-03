@@ -141,6 +141,7 @@
     }
 
     .sound-toggle {
+      display: none;
       position: fixed;
       top: 14px;
       right: 14px;
@@ -154,6 +155,10 @@
       box-shadow: 0 12px 26px rgba(0, 0, 0, 0.32);
       backdrop-filter: blur(10px);
       z-index: 998;
+    }
+
+    .sound-toggle.ready {
+      display: flex;
     }
 
     .toggle {
@@ -357,6 +362,62 @@
       animation: pullSnap 0.35s ease-out;
     }
 
+    /* Margin truck lane */
+    .margin-lane {
+      position: fixed;
+      inset: 0 auto 0 6px;
+      width: 120px;
+      pointer-events: none;
+      z-index: 996;
+    }
+
+    .lane-line {
+      position: absolute;
+      left: 46px;
+      top: 70px;
+      width: 4px;
+      height: calc(100% - 160px);
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%);
+      border-radius: 999px;
+      box-shadow: 0 0 0 8px rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(2px);
+    }
+
+    .margin-truck {
+      position: absolute;
+      left: -6px;
+      top: 70px;
+      width: 120px;
+      transition: transform 160ms ease-out;
+      filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.35));
+    }
+
+    .mini-truck {
+      width: 120px;
+      height: auto;
+      transform-origin: 50% 50%;
+      transition: transform 160ms ease-out;
+    }
+
+    .margin-truck.forward .mini-truck {
+      transform: rotate(90deg);
+    }
+
+    .margin-truck.reverse .mini-truck {
+      transform: rotate(-90deg) scale(0.98);
+    }
+
+
+    .margin-truck.forward .wheel,
+    .margin-truck.reverse .wheel {
+      animation-play-state: running;
+    }
+
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
     @keyframes ropeSway {
       0% { transform: rotate(0deg); }
       25% { transform: rotate(-4deg); }
@@ -369,6 +430,12 @@
       0% { transform: translateY(0); }
       50% { transform: translateY(10px); }
       100% { transform: translateY(0); }
+    }
+
+    @media (max-width: 900px) {
+      .margin-lane {
+        display: none;
+      }
     }
 
     @media (max-width: 720px) {
@@ -388,7 +455,45 @@
   <div class="pull-string" aria-hidden="true">
     <div class="pull-anchor"></div>
     <div class="pull-rope"></div>
-    <button class="pull-handle" aria-label="Honk the truck horn">Honk</button>
+    <button class="pull-handle" aria-label="Play sounds and honk the truck horn">Play Sounds</button>
+  </div>
+
+  <div class="margin-lane" aria-hidden="true">
+    <div class="lane-line"></div>
+    <div class="margin-truck forward">
+      <svg class="mini-truck" viewBox="0 0 260 170" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <defs>
+          <linearGradient id="mini-body" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#27b1ff"/>
+            <stop offset="100%" stop-color="#1d6ad1"/>
+          </linearGradient>
+          <linearGradient id="mini-cab" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#f6f8fb"/>
+            <stop offset="100%" stop-color="#dbe7ff"/>
+          </linearGradient>
+          <linearGradient id="mini-glass" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#dff3ff" stop-opacity="0.9"/>
+            <stop offset="100%" stop-color="#9ec4ff" stop-opacity="0.9"/>
+          </linearGradient>
+        </defs>
+        <rect x="26" y="66" width="142" height="54" rx="10" fill="url(#mini-body)" stroke="#0a2b4f" stroke-width="7"/>
+        <rect x="162" y="56" width="70" height="78" rx="14" fill="url(#mini-cab)" stroke="#0a2b4f" stroke-width="7"/>
+        <rect x="180" y="66" width="46" height="28" rx="8" fill="url(#mini-glass)" stroke="#0a2b4f" stroke-width="5"/>
+        <rect x="46" y="80" width="46" height="20" rx="6" fill="#0a2b4f" opacity="0.18"/>
+        <rect x="102" y="80" width="46" height="20" rx="6" fill="#0a2b4f" opacity="0.18"/>
+        <rect x="30" y="116" width="108" height="10" rx="5" fill="#0a2b4f"/>
+        <rect x="170" y="114" width="70" height="10" rx="5" fill="#0a2b4f"/>
+        <rect x="182" y="126" width="52" height="10" rx="5" fill="#0a2b4f"/>
+        <rect x="18" y="92" width="20" height="12" rx="4" fill="#ffb703"/>
+        <circle cx="220" cy="100" r="10" fill="#ffb703"/>
+        <!-- <circle class="wheel" cx="80" cy="136" r="28" fill="#0a2b4f"/>
+        <circle class="wheel" cx="150" cy="136" r="28" fill="#0a2b4f"/> -->
+        <circle cx="80" cy="136" r="17" fill="#e9f1fb"/>
+        <circle cx="150" cy="136" r="17" fill="#e9f1fb"/>
+        <circle cx="80" cy="136" r="6" fill="#0a2b4f"/>
+        <circle cx="150" cy="136" r="6" fill="#0a2b4f"/>
+      </svg>
+    </div>
   </div>
 
   <div class="sound-toggle">
@@ -434,27 +539,32 @@
               <stop offset="100%" stop-color="#9ec4ff" stop-opacity="0.9"/>
             </linearGradient>
           </defs>
-          <rect x="80" y="120" width="320" height="110" rx="18" fill="url(#body)" stroke="#0a2b4f" stroke-width="8"/>
-          <rect x="320" y="110" width="110" height="140" rx="20" fill="url(#cab)" stroke="#0a2b4f" stroke-width="8"/>
-          <rect x="340" y="130" width="90" height="60" rx="10" fill="url(#glass)" stroke="#0a2b4f" stroke-width="6"/>
-          <rect x="110" y="150" width="60" height="40" rx="6" fill="#0a2b4f" opacity="0.25"/>
-          <rect x="190" y="150" width="60" height="40" rx="6" fill="#0a2b4f" opacity="0.25"/>
-          <rect x="270" y="150" width="60" height="40" rx="6" fill="#0a2b4f" opacity="0.25"/>
-          <rect x="92" y="230" width="260" height="10" rx="5" fill="#0a2b4f"/>
-          <rect x="95" y="204" width="30" height="20" rx="4" fill="#f6f8fb" stroke="#0a2b4f" stroke-width="5"/>
-          <rect x="285" y="204" width="30" height="20" rx="4" fill="#f6f8fb" stroke="#0a2b4f" stroke-width="5"/>
-          <rect x="335" y="232" width="90" height="12" rx="6" fill="#0a2b4f"/>
-          <rect x="380" y="246" width="60" height="12" rx="6" fill="#0a2b4f"/>
-          <circle cx="170" cy="242" r="42" fill="#0a2b4f"/>
-          <circle cx="170" cy="242" r="26" fill="#e9f1fb"/>
-          <circle cx="320" cy="242" r="42" fill="#0a2b4f"/>
-          <circle cx="320" cy="242" r="26" fill="#e9f1fb"/>
-          <circle cx="170" cy="242" r="8" fill="#0a2b4f"/>
-          <circle cx="320" cy="242" r="8" fill="#0a2b4f"/>
-          <rect x="60" y="180" width="26" height="18" rx="4" fill="#ffb703"/>
-          <circle cx="440" cy="208" r="12" fill="#ffb703"/>
-          <rect x="402" y="178" width="70" height="26" rx="4" fill="#0a2b4f" opacity="0.15"/>
-          <rect x="402" y="206" width="36" height="14" rx="4" fill="#0a2b4f" opacity="0.2"/>
+          <!-- Trailer -->
+          <rect x="40" y="126" width="260" height="94" rx="16" fill="url(#body)" stroke="#0a2b4f" stroke-width="8"/>
+          <rect x="56" y="144" width="228" height="26" rx="8" fill="#0a2b4f" opacity="0.22"/>
+          <rect x="48" y="206" width="244" height="10" rx="5" fill="#0a2b4f"/>
+          <!-- Tractor -->
+          <rect x="310" y="122" width="130" height="118" rx="20" fill="url(#cab)" stroke="#0a2b4f" stroke-width="8"/>
+          <rect x="330" y="136" width="90" height="56" rx="12" fill="url(#glass)" stroke="#0a2b4f" stroke-width="6"/>
+          <rect x="306" y="194" width="62" height="26" rx="6" fill="#0a2b4f" opacity="0.2"/>
+          <rect x="370" y="198" width="72" height="18" rx="6" fill="#0a2b4f" opacity="0.14"/>
+          <rect x="284" y="190" width="34" height="20" rx="4" fill="#0a2b4f" opacity="0.22"/>
+          <!-- Fifth wheel + connection -->
+          <rect x="290" y="206" width="34" height="10" rx="4" fill="#0a2b4f"/>
+          <rect x="274" y="206" width="26" height="10" rx="4" fill="#0a2b4f" opacity="0.4"/>
+          <!-- Lights -->
+          <rect x="52" y="180" width="26" height="18" rx="4" fill="#ffb703"/>
+          <circle cx="446" cy="192" r="12" fill="#ffb703"/>
+          <!-- Wheels -->
+          <circle cx="104" cy="236" r="38" fill="#0a2b4f"/>
+          <circle cx="186" cy="236" r="38" fill="#0a2b4f"/>
+          <circle cx="104" cy="236" r="24" fill="#e9f1fb"/>
+          <circle cx="186" cy="236" r="24" fill="#e9f1fb"/>
+          <circle cx="104" cy="236" r="8" fill="#0a2b4f"/>
+          <circle cx="186" cy="236" r="8" fill="#0a2b4f"/>
+          <circle cx="334" cy="242" r="42" fill="#0a2b4f"/>
+          <circle cx="334" cy="242" r="26" fill="#e9f1fb"/>
+          <circle cx="334" cy="242" r="8" fill="#0a2b4f"/>
         </svg>
       </div>
     </header>
@@ -535,14 +645,22 @@
     const pullHandle = document.querySelector(".pull-handle");
     const rope = document.querySelector(".pull-rope");
     const airbrakeToggle = document.getElementById("airbrake-toggle");
+    const soundToggle = document.querySelector(".sound-toggle");
+    const marginTruck = document.querySelector(".margin-truck");
     const hornAudio = new Audio("media/horn.m4a");
     const airbrakeAudio = new Audio("media/airbrake.m4a");
     hornAudio.preload = "auto";
     airbrakeAudio.preload = "auto";
+    if (soundToggle) {
+      soundToggle.classList.remove("ready");
+      soundToggle.style.display = "none";
+    }
     let audioCtx;
     let scrollTimer;
     let lastScrollY = window.scrollY;
-    let airbrakeEnabled = true;
+    let airbrakeEnabled = false;
+    let airbrakeUnlocked = false;
+    let truckDirectionDown = true;
 
     function ensureAudioContext() {
       if (!audioCtx) {
@@ -567,6 +685,23 @@
       airbrakeAudio.play();
     }
 
+    function updateMarginTruckPosition() {
+      if (!marginTruck) return;
+      const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = maxScroll > 0 ? window.scrollY / maxScroll : 0;
+      const travel = Math.max(window.innerHeight - 220, 60);
+      const y = 70 + progress * travel;
+      marginTruck.style.transform = `translateY(${y}px)`;
+    }
+
+    function updateTruckDirection(isDown) {
+      if (!marginTruck) return;
+      if (truckDirectionDown === isDown) return;
+      truckDirectionDown = isDown;
+      marginTruck.classList.toggle("forward", isDown);
+      marginTruck.classList.toggle("reverse", !isDown);
+    }
+
     pullHandle.addEventListener("click", () => {
       pullHandle.classList.remove("pulled");
       void pullHandle.offsetWidth; // restart animation
@@ -574,18 +709,34 @@
       rope.classList.add("pulled");
       playHorn();
       setTimeout(() => rope.classList.remove("pulled"), 350);
+      if (!airbrakeUnlocked) {
+        airbrakeUnlocked = true;
+        airbrakeEnabled = true;
+        airbrakeToggle.checked = true;
+        pullHandle.textContent = "Honk";
+        pullHandle.setAttribute("aria-label", "Honk the truck horn");
+        if (soundToggle) {
+          soundToggle.style.display = "flex";
+          soundToggle.classList.add("ready");
+        }
+      }
     });
 
     window.addEventListener("scroll", () => {
       const current = window.scrollY;
       if (current === lastScrollY) return;
+      const movingDown = current > lastScrollY;
+      updateTruckDirection(movingDown);
       lastScrollY = current;
+      updateMarginTruckPosition();
       clearTimeout(scrollTimer);
-      if (!airbrakeEnabled) return;
+      if (!airbrakeUnlocked || !airbrakeEnabled) return;
       scrollTimer = setTimeout(() => {
         playAirBrakes();
       }, 220);
     }, { passive: true });
+
+    window.addEventListener("resize", updateMarginTruckPosition);
 
     airbrakeToggle.addEventListener("change", () => {
       airbrakeEnabled = airbrakeToggle.checked;
@@ -594,6 +745,7 @@
       }
     });
 
+    updateMarginTruckPosition();
     ["pointerdown", "touchstart", "keydown", "wheel", "touchmove"].forEach(evt => {
       window.addEventListener(evt, ensureAudioContext, { once: true, passive: true });
     });
