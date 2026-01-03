@@ -373,14 +373,19 @@
 
     .lane-line {
       position: absolute;
-      left: 46px;
-      top: 70px;
-      width: 4px;
-      height: calc(100% - 160px);
-      background: linear-gradient(180deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%);
-      border-radius: 999px;
-      box-shadow: 0 0 0 8px rgba(255, 255, 255, 0.03);
-      backdrop-filter: blur(2px);
+      left: 15px;
+      top: 0;
+      bottom: 0;
+      width: 90px;
+      background-color: #1f2933;
+      background-image:
+        linear-gradient(90deg, rgba(255, 255, 255, 0.12) 0, rgba(255, 255, 255, 0.12) 3px, transparent 3px, transparent 87px, rgba(255, 255, 255, 0.12) 87px, rgba(255, 255, 255, 0.12) 90px),
+        repeating-linear-gradient(180deg, transparent 0, transparent 18px, rgba(255, 255, 255, 0.92) 18px, rgba(255, 255, 255, 0.92) 30px);
+      background-size: 100% 100%, 6px 48px;
+      background-position: 0 0, 50% 0;
+      background-repeat: no-repeat, repeat-y;
+      border-radius: 28px;
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08), 0 8px 22px rgba(0, 0, 0, 0.35);
     }
 
     .margin-truck {
@@ -388,8 +393,10 @@
       left: -6px;
       top: 70px;
       width: 120px;
+      pointer-events: auto;
       transition: transform 160ms ease-out;
       filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.35));
+      cursor: pointer;
     }
 
     .mini-truck {
@@ -476,22 +483,31 @@
             <stop offset="100%" stop-color="#9ec4ff" stop-opacity="0.9"/>
           </linearGradient>
         </defs>
-        <rect x="26" y="66" width="142" height="54" rx="10" fill="url(#mini-body)" stroke="#0a2b4f" stroke-width="7"/>
-        <rect x="162" y="56" width="70" height="78" rx="14" fill="url(#mini-cab)" stroke="#0a2b4f" stroke-width="7"/>
-        <rect x="180" y="66" width="46" height="28" rx="8" fill="url(#mini-glass)" stroke="#0a2b4f" stroke-width="5"/>
-        <rect x="46" y="80" width="46" height="20" rx="6" fill="#0a2b4f" opacity="0.18"/>
-        <rect x="102" y="80" width="46" height="20" rx="6" fill="#0a2b4f" opacity="0.18"/>
-        <rect x="30" y="116" width="108" height="10" rx="5" fill="#0a2b4f"/>
-        <rect x="170" y="114" width="70" height="10" rx="5" fill="#0a2b4f"/>
-        <rect x="182" y="126" width="52" height="10" rx="5" fill="#0a2b4f"/>
-        <rect x="18" y="92" width="20" height="12" rx="4" fill="#ffb703"/>
-        <circle cx="220" cy="100" r="10" fill="#ffb703"/>
-        <!-- <circle class="wheel" cx="80" cy="136" r="28" fill="#0a2b4f"/>
-        <circle class="wheel" cx="150" cy="136" r="28" fill="#0a2b4f"/> -->
-        <circle cx="80" cy="136" r="17" fill="#e9f1fb"/>
-        <circle cx="150" cy="136" r="17" fill="#e9f1fb"/>
-        <circle cx="80" cy="136" r="6" fill="#0a2b4f"/>
-        <circle cx="150" cy="136" r="6" fill="#0a2b4f"/>
+        <!-- Trailer -->
+        <rect x="10" y="70" width="140" height="48" rx="10" fill="url(#mini-body)" stroke="#0a2b4f" stroke-width="6"/>
+        <rect x="18" y="82" width="122" height="14" rx="6" fill="#0a2b4f" opacity="0.2"/>
+        <rect x="14" y="116" width="132" height="8" rx="4" fill="#0a2b4f"/>
+        <!-- Tractor -->
+        <rect x="150" y="64" width="96" height="76" rx="14" fill="url(#mini-cab)" stroke="#0a2b4f" stroke-width="6"/>
+        <rect x="168" y="74" width="56" height="28" rx="8" fill="url(#mini-glass)" stroke="#0a2b4f" stroke-width="4"/>
+        <rect x="146" y="110" width="40" height="16" rx="5" fill="#0a2b4f" opacity="0.16"/>
+        <rect x="210" y="110" width="30" height="14" rx="5" fill="#0a2b4f" opacity="0.14"/>
+        <!-- Connection -->
+        <rect x="142" y="114" width="20" height="8" rx="4" fill="#0a2b4f"/>
+        <rect x="132" y="114" width="14" height="8" rx="4" fill="#0a2b4f" opacity="0.4"/>
+        <!-- Lights -->
+        <rect x="16" y="96" width="16" height="10" rx="4" fill="#ffb703"/>
+        <circle cx="234" cy="98" r="8" fill="#ffb703"/>
+        <!-- Wheels -->
+        <circle class="wheel" cx="58" cy="134" r="24" fill="#0a2b4f"/>
+        <circle class="wheel" cx="112" cy="134" r="24" fill="#0a2b4f"/>
+        <circle cx="58" cy="134" r="15" fill="#e9f1fb"/>
+        <circle cx="112" cy="134" r="15" fill="#e9f1fb"/>
+        <circle cx="58" cy="134" r="5" fill="#0a2b4f"/>
+        <circle cx="112" cy="134" r="5" fill="#0a2b4f"/>
+        <circle class="wheel" cx="182" cy="136" r="26" fill="#0a2b4f"/>
+        <circle cx="182" cy="136" r="16" fill="#e9f1fb"/>
+        <circle cx="182" cy="136" r="6" fill="#0a2b4f"/>
       </svg>
     </div>
   </div>
@@ -702,7 +718,7 @@
       marginTruck.classList.toggle("reverse", !isDown);
     }
 
-    pullHandle.addEventListener("click", () => {
+    function handleHornAction() {
       pullHandle.classList.remove("pulled");
       void pullHandle.offsetWidth; // restart animation
       pullHandle.classList.add("pulled");
@@ -720,7 +736,12 @@
           soundToggle.classList.add("ready");
         }
       }
-    });
+    }
+
+    pullHandle.addEventListener("click", handleHornAction);
+    if (marginTruck) {
+      marginTruck.addEventListener("click", handleHornAction);
+    }
 
     window.addEventListener("scroll", () => {
       const current = window.scrollY;
