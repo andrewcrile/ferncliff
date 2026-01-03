@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fern Cliff Trucking | Iowa Freight Carrier</title>
+  <style>
+    :root {
+      --ink: #0d1b2a;
+      --deep: #102940;
+      --accent: #ffb703;
+      --accent-2: #ff7b00;
+      --muted: #5d738a;
+      --card: #ffffff;
+      --bg: radial-gradient(circle at 20% 20%, rgba(255, 183, 3, 0.08), transparent 35%), radial-gradient(circle at 80% 10%, rgba(0, 163, 255, 0.12), transparent 30%), linear-gradient(135deg, #0f2335 0%, #081521 45%, #0f2335 100%);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Futura", "Avenir Next", "Gill Sans", "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: #e9eff5;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .page {
+      max-width: 1200px;
+      padding: 32px 22px 64px;
+      margin: 0 auto;
+    }
+
+    header.hero {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 28px;
+      align-items: center;
+      padding: 42px 0 20px;
+    }
+
+    .eyebrow {
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    h1 {
+      font-size: clamp(34px, 4vw, 52px);
+      margin: 12px 0 12px;
+      line-height: 1.1;
+    }
+
+    .lede {
+      max-width: 520px;
+      color: #d4e1ed;
+      font-size: 17px;
+      margin-bottom: 22px;
+    }
+
+    .cta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .cta a {
+      padding: 12px 18px;
+      border-radius: 14px;
+      font-weight: 700;
+      transition: transform 150ms ease, box-shadow 150ms ease, background 200ms ease;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+    }
+
+    .cta a.primary {
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%);
+      color: #0d1b2a;
+    }
+
+    .cta a.secondary {
+      background: rgba(255, 255, 255, 0.06);
+      color: #f1f5f9;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .cta a:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 16px 30px rgba(0, 0, 0, 0.35);
+    }
+
+    .badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .badge {
+      padding: 8px 12px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 10px;
+      color: #e4ecf5;
+      font-size: 13px;
+    }
+
+    .section-title {
+      margin: 46px 0 12px;
+      font-size: 22px;
+      color: #f3f7fb;
+      letter-spacing: 0.01em;
+    }
+
+    .pill-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      padding: 0;
+      margin: 8px 0 0;
+      list-style: none;
+    }
+
+    .pill {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #d9e4f2;
+      padding: 6px 10px;
+      border-radius: 10px;
+      font-size: 14px;
+      line-height: 1.3;
+    }
+
+    .sound-toggle {
+      position: fixed;
+      top: 14px;
+      right: 14px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 14px;
+      padding: 10px 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 12px 26px rgba(0, 0, 0, 0.32);
+      backdrop-filter: blur(10px);
+      z-index: 998;
+    }
+
+    .toggle {
+      position: relative;
+      display: inline-block;
+      width: 54px;
+      height: 30px;
+    }
+
+    .toggle input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      inset: 0;
+      background: #0f2335;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 30px;
+      transition: all 160ms ease;
+      box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.35);
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 20px;
+      width: 20px;
+      left: 6px;
+      bottom: 4px;
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%);
+      border-radius: 50%;
+      transition: transform 160ms ease;
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.35);
+    }
+
+    .toggle input:checked + .slider {
+      background: #14304a;
+    }
+
+    .toggle input:checked + .slider:before {
+      transform: translateX(22px);
+    }
+
+    .sound-toggle .label-text {
+      font-weight: 700;
+      font-size: 13px;
+      color: #e4ecf5;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+    }
+
+    .hero-visual {
+      position: relative;
+      padding: 22px;
+      background: linear-gradient(160deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02));
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 24px 40px rgba(0, 0, 0, 0.35);
+    }
+
+    .hero-visual::after {
+      content: "";
+      position: absolute;
+      inset: -30%;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.08) 0, rgba(255, 255, 255, 0) 50%);
+      transform: rotate(8deg);
+      pointer-events: none;
+    }
+
+    .truck-graphic {
+      width: 100%;
+      max-width: 420px;
+      margin: 0 auto;
+      display: block;
+      position: relative;
+      z-index: 1;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 18px;
+      margin: 38px 0 12px;
+    }
+
+    .card {
+      background: #102234;
+      border-radius: 16px;
+      padding: 18px 18px 16px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.3);
+    }
+
+    .card h3 {
+      margin: 6px 0 8px;
+      font-size: 18px;
+      color: #f3f7fb;
+    }
+
+    .card p {
+      margin: 0;
+      color: #c9d6e4;
+      font-size: 15px;
+    }
+
+    .stat {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      font-weight: 800;
+      color: var(--accent);
+      margin: 6px 0 12px;
+    }
+
+    .stat small {
+      color: #d7e4f0;
+      font-weight: 600;
+    }
+
+    footer {
+      margin-top: 38px;
+      color: #c7d2df;
+      font-size: 14px;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      padding-top: 18px;
+    }
+
+    /* Pull string */
+    .pull-string {
+      position: fixed;
+      top: 14px;
+      left: 14px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      z-index: 999;
+      pointer-events: none;
+    }
+
+    .pull-anchor {
+      width: 12px;
+      height: 12px;
+      background: var(--accent);
+      border-radius: 50%;
+      box-shadow: 0 0 0 6px rgba(255, 183, 3, 0.12);
+    }
+
+    .pull-rope {
+      width: 4px;
+      height: 96px;
+      background: linear-gradient(180deg, #f2c14e 0%, #c17a00 100%);
+      border-radius: 10px;
+      transform-origin: top center;
+      animation: ropeSway 3.6s ease-in-out infinite;
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.28);
+    }
+
+    .pull-rope.pulled {
+      animation: none;
+      transform: translateY(8px);
+    }
+
+    .pull-handle {
+      pointer-events: auto;
+      border: none;
+      cursor: pointer;
+      width: 94px;
+      padding: 10px 12px 12px;
+      border-radius: 12px 12px 16px 16px;
+      background: linear-gradient(180deg, #ffd166 0%, #f4a261 100%);
+      color: #152238;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      box-shadow: 0 10px 18px rgba(0, 0, 0, 0.35);
+      transform-origin: top center;
+      transition: transform 120ms ease, box-shadow 120ms ease;
+    }
+
+    .pull-handle:focus-visible {
+      outline: 2px solid #ffffff;
+      outline-offset: 3px;
+    }
+
+    .pull-handle:active {
+      transform: translateY(8px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+    }
+
+    .pull-handle.pulled {
+      animation: pullSnap 0.35s ease-out;
+    }
+
+    @keyframes ropeSway {
+      0% { transform: rotate(0deg); }
+      25% { transform: rotate(-4deg); }
+      50% { transform: rotate(2.5deg); }
+      75% { transform: rotate(-3deg); }
+      100% { transform: rotate(0deg); }
+    }
+
+    @keyframes pullSnap {
+      0% { transform: translateY(0); }
+      50% { transform: translateY(10px); }
+      100% { transform: translateY(0); }
+    }
+
+    @media (max-width: 720px) {
+      .page {
+        padding: 26px 16px 56px;
+      }
+      .pull-string {
+        left: 10px;
+      }
+      .hero-visual {
+        order: -1;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="pull-string" aria-hidden="true">
+    <div class="pull-anchor"></div>
+    <div class="pull-rope"></div>
+    <button class="pull-handle" aria-label="Honk the truck horn">Honk</button>
+  </div>
+
+  <div class="sound-toggle">
+    <label class="toggle" aria-label="Toggle airbrake sound">
+      <input type="checkbox" id="airbrake-toggle" checked>
+      <span class="slider"></span>
+    </label>
+    <span class="label-text">Airbrake sound</span>
+  </div>
+
+  <div class="page">
+    <header class="hero">
+      <div>
+        <div class="eyebrow">Fern Cliff Trucking · Iowa</div>
+        <h1>Reliable, on-time trucking across the heartland.</h1>
+        <p class="lede">
+          Family-owned and dispatching daily from Iowa with dedicated routes, refrigerated capacity,
+          and hazmat-ready drivers you can count on when timelines are tight.
+        </p>
+        <div class="cta">
+          <a class="primary" href="tel:+13195551234">Call dispatch</a>
+          <a class="secondary" href="mailto:dispatch@fernclifftrucking.com">Request a haul</a>
+        </div>
+        <div class="badges">
+          <span class="badge">24/7 live dispatch</span>
+          <span class="badge">Iowa · Midwest · National</span>
+          <span class="badge">Food-grade + hazmat certified</span>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <svg class="truck-graphic" viewBox="0 0 520 320" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <defs>
+            <linearGradient id="body" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#27b1ff"/>
+              <stop offset="100%" stop-color="#1d6ad1"/>
+            </linearGradient>
+            <linearGradient id="cab" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#f6f8fb"/>
+              <stop offset="100%" stop-color="#dbe7ff"/>
+            </linearGradient>
+            <linearGradient id="glass" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#dff3ff" stop-opacity="0.9"/>
+              <stop offset="100%" stop-color="#9ec4ff" stop-opacity="0.9"/>
+            </linearGradient>
+          </defs>
+          <rect x="80" y="120" width="320" height="110" rx="18" fill="url(#body)" stroke="#0a2b4f" stroke-width="8"/>
+          <rect x="320" y="110" width="110" height="140" rx="20" fill="url(#cab)" stroke="#0a2b4f" stroke-width="8"/>
+          <rect x="340" y="130" width="90" height="60" rx="10" fill="url(#glass)" stroke="#0a2b4f" stroke-width="6"/>
+          <rect x="110" y="150" width="60" height="40" rx="6" fill="#0a2b4f" opacity="0.25"/>
+          <rect x="190" y="150" width="60" height="40" rx="6" fill="#0a2b4f" opacity="0.25"/>
+          <rect x="270" y="150" width="60" height="40" rx="6" fill="#0a2b4f" opacity="0.25"/>
+          <rect x="92" y="230" width="260" height="10" rx="5" fill="#0a2b4f"/>
+          <rect x="95" y="204" width="30" height="20" rx="4" fill="#f6f8fb" stroke="#0a2b4f" stroke-width="5"/>
+          <rect x="285" y="204" width="30" height="20" rx="4" fill="#f6f8fb" stroke="#0a2b4f" stroke-width="5"/>
+          <rect x="335" y="232" width="90" height="12" rx="6" fill="#0a2b4f"/>
+          <rect x="380" y="246" width="60" height="12" rx="6" fill="#0a2b4f"/>
+          <circle cx="170" cy="242" r="42" fill="#0a2b4f"/>
+          <circle cx="170" cy="242" r="26" fill="#e9f1fb"/>
+          <circle cx="320" cy="242" r="42" fill="#0a2b4f"/>
+          <circle cx="320" cy="242" r="26" fill="#e9f1fb"/>
+          <circle cx="170" cy="242" r="8" fill="#0a2b4f"/>
+          <circle cx="320" cy="242" r="8" fill="#0a2b4f"/>
+          <rect x="60" y="180" width="26" height="18" rx="4" fill="#ffb703"/>
+          <circle cx="440" cy="208" r="12" fill="#ffb703"/>
+          <rect x="402" y="178" width="70" height="26" rx="4" fill="#0a2b4f" opacity="0.15"/>
+          <rect x="402" y="206" width="36" height="14" rx="4" fill="#0a2b4f" opacity="0.2"/>
+        </svg>
+      </div>
+    </header>
+
+    <section class="grid">
+      <div class="card">
+        <div class="stat">Specialized <small>Reefer · Hazmat · Food-grade</small></div>
+        <h3>Specialty Capacity</h3>
+        <p>Clean trailers, temperature control, and hazmat-certified operators who know the compliance playbook cold.</p>
+      </div>
+    </section>
+
+    <section class="grid">
+      <div class="card">
+        <h3>What we move</h3>
+        <p>Food ingredients, consumer packaged goods, bulk dry freight, construction materials, and event freight needing white-glove timing.</p>
+      </div>
+      <div class="card">
+        <h3>Coverage map</h3>
+        <p>Daily Iowa coverage with strong lanes into MN, WI, IL, MO, NE, and expedited dispatch to the lower 48 when you need reach.</p>
+      </div>
+      <div class="card">
+        <h3>Why Fern Cliff</h3>
+        <p>Family-owned accountability, drivers treated like partners, and dispatchers who pick up on the first ring—no phone trees, no surprises.</p>
+      </div>
+    </section>
+
+    <h2 class="section-title">Carrier snapshot</h2>
+    <section class="grid">
+      <div class="card">
+        <div class="stat">Fleet <small>Equipment & drivers</small></div>
+        <ul class="pill-list">
+          <li class="pill">7 tractors owned</li>
+          <li class="pill">12 trailers owned</li>
+          <li class="pill">6 total drivers</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="stat">Services <small>Freight types</small></div>
+        <p>Versatile coverage across general freight, heavy materials, agriculture, and specialized goods.</p>
+        <ul class="pill-list">
+          <li class="pill">General freight</li>
+          <li class="pill">Metal sheet</li>
+          <li class="pill">Log pole</li>
+          <li class="pill">Building maintenance</li>
+          <li class="pill">Large machinery</li>
+          <li class="pill">Produce</li>
+          <li class="pill">Livestock</li>
+          <li class="pill">Grain/feed</li>
+          <li class="pill">Chemicals</li>
+          <li class="pill">Dry bulk</li>
+          <li class="pill">Beverages</li>
+          <li class="pill">Paper</li>
+          <li class="pill">Farm supplies</li>
+          <li class="pill">Construction</li>
+        </ul>
+      </div>
+    </section>
+    <section class="grid">
+      <div class="card">
+        <div class="stat">Contact</div>
+        <p>Reach dispatch and operations any time for quotes, load tenders, or safety documentation.</p>
+        <ul class="pill-list">
+          <li class="pill"><a href="tel:+13194618133">(319) 461-8133</a></li>
+          <li class="pill"><a href="mailto:fernclifftrucking@gmail.com">fernclifftrucking@gmail.com</a></li>
+          <li class="pill">Crawfordsville, Iowa</li>
+        </ul>
+      </div>
+    </section>
+
+    <footer>
+      <span>Fern Cliff Trucking LLC · 2851 305th St, Crawfordsville, IA 52621 · USDOT-ready</span>
+      <span>Call 319-555-1234 · dispatch@fernclifftrucking.com</span>
+    </footer>
+  </div>
+
+  <script>
+    const pullHandle = document.querySelector(".pull-handle");
+    const rope = document.querySelector(".pull-rope");
+    const airbrakeToggle = document.getElementById("airbrake-toggle");
+    let audioCtx;
+    let scrollTimer;
+    let lastScrollY = window.scrollY;
+    let airbrakeEnabled = true;
+
+    function ensureAudioContext() {
+      if (!audioCtx) {
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        audioCtx = new AudioContextClass();
+      }
+      if (audioCtx.state === "suspended") {
+        audioCtx.resume();
+      }
+      return audioCtx;
+    }
+
+function playHorn() {
+    const audio = new Audio('media/horn.m4a');
+    audio.currentTime = 0;
+    audio.play();
+}
+
+    function playAirBrakes() {
+    const audio = new Audio('media/airbrake.m4a');
+    audio.currentTime = 0;
+    audio.play();
+}
+
+    pullHandle.addEventListener("click", () => {
+      pullHandle.classList.remove("pulled");
+      void pullHandle.offsetWidth; // restart animation
+      pullHandle.classList.add("pulled");
+      rope.classList.add("pulled");
+      playHorn();
+      setTimeout(() => rope.classList.remove("pulled"), 350);
+    });
+
+    window.addEventListener("scroll", () => {
+      const current = window.scrollY;
+      if (current === lastScrollY) return;
+      lastScrollY = current;
+      clearTimeout(scrollTimer);
+      if (!airbrakeEnabled) return;
+      scrollTimer = setTimeout(() => {
+        playAirBrakes();
+      }, 220);
+    }, { passive: true });
+
+    airbrakeToggle.addEventListener("change", () => {
+      airbrakeEnabled = airbrakeToggle.checked;
+      if (!airbrakeEnabled) {
+        clearTimeout(scrollTimer);
+      }
+    });
+
+    ["pointerdown", "touchstart", "keydown"].forEach(evt => {
+      window.addEventListener(evt, ensureAudioContext, { once: true });
+    });
+  </script>
+</body>
+</html>
